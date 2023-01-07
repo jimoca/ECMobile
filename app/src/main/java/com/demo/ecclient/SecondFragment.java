@@ -18,12 +18,10 @@ import model.PictureBase;
 import model.PictureMask;
 import model.PictureRaw;
 import utils.BitmapHelper;
-import utils.TypeConverter;
 
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
-    Bitmap bitmap;
 
 
     @Override

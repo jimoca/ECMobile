@@ -23,12 +23,18 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.demo.ecclient.databinding.FragmentFirstBinding;
 
 import java.io.IOException;
+import java.security.KeyPair;
+import java.security.SecureRandom;
 import java.util.HashMap;
 
 import model.PictureBase;
 import model.PictureMask;
 import model.PictureRaw;
+import security.paillier.PaillierKeyPairGenerator;
+import security.paillier.PaillierPrivateKey;
+import security.paillier.PaillierPublicKey;
 import utils.BitmapHelper;
+import utils.PaillierPixels;
 
 public class FirstFragment extends Fragment {
 
@@ -44,6 +50,10 @@ public class FirstFragment extends Fragment {
 
     private Bitmap bitmapWatermark;
 
+    private PaillierPublicKey publicKey;
+
+    private PaillierPrivateKey privateKey;
+
 
     @Override
     public View onCreateView(
@@ -58,12 +68,18 @@ public class FirstFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        initializeKeyPair();
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 PictureBase pictureBase = PictureBase.pictureBase(bitmapImage, imagePixels);
                 PictureMask pictureMask = PictureMask.pictureMask(bitmapWatermark, watermarkPixels);
+                pictureBase.setPixels(PaillierPixels
+                        .encryptPixels(pictureBase.getPixels(), publicKey));
+                pictureMask.setPixels(PaillierPixels
+                        .encryptPixels(pictureMask.getPixels(), publicKey));
 
                 Bundle bundle = new Bundle();
                 HashMap<String, PictureRaw> rawMap = new HashMap<>();
@@ -123,4 +139,13 @@ public class FirstFragment extends Fragment {
                 }
             });
 
+    private void initializeKeyPair() {
+        int KEY_SIZE = 2048;
+        SecureRandom r = new SecureRandom();
+        PaillierKeyPairGenerator p = new PaillierKeyPairGenerator();
+        p.initialize(KEY_SIZE, r);
+        KeyPair pe = p.generateKeyPair();
+        publicKey = (PaillierPublicKey) pe.getPublic();
+        privateKey = (PaillierPrivateKey) pe.getPrivate();
+    }
 }

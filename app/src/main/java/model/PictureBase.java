@@ -22,6 +22,9 @@ public class PictureBase implements PictureRaw{
         return new PictureBase(bigIntegers, bitmap.getWidth(), bitmap.getHeight());
     }
 
+    public void setPixels(BigInteger[] pixels) {
+        this.pixels = pixels;
+    }
 
     @Override
     public BigInteger[] getPixels() {

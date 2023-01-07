@@ -22,6 +22,9 @@ public class PictureMask implements PictureRaw {
         return new PictureMask(bigIntegers, bitmap.getWidth(), bitmap.getHeight());
     }
 
+    public void setPixels(BigInteger[] pixels) {
+        this.pixels = pixels;
+    }
 
     @Override
     public BigInteger[] getPixels() {
