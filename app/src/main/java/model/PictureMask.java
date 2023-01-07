@@ -6,13 +6,11 @@ import java.math.BigInteger;
 
 public class PictureMask implements PictureRaw {
     private BigInteger[] pixels;
-    private Bitmap bitmap;
     private int width;
     private int height;
 
-    public PictureMask(BigInteger[] pixels, Bitmap bitmap, int width, int height) {
+    public PictureMask(BigInteger[] pixels, int width, int height) {
         this.pixels = pixels;
-        this.bitmap = bitmap;
         this.width = width;
         this.height = height;
     }
@@ -21,12 +19,9 @@ public class PictureMask implements PictureRaw {
         BigInteger[] bigIntegers = new BigInteger[pixels.length];
         for (int i = 0; i < pixels.length; i++)
             bigIntegers[i] = BigInteger.valueOf(pixels[i]);
-        return new PictureMask(bigIntegers, bitmap, bitmap.getWidth(), bitmap.getHeight());
+        return new PictureMask(bigIntegers, bitmap.getWidth(), bitmap.getHeight());
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
 
     @Override
     public BigInteger[] getPixels() {

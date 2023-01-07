@@ -62,13 +62,13 @@ public class FirstFragment extends Fragment {
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                imagePixels = encrypt(bitmapImage);
-//                watermarkPixels = encrypt(bitmapWatermark);
+                PictureBase pictureBase = PictureBase.pictureBase(bitmapImage, imagePixels);
+                PictureMask pictureMask = PictureMask.pictureMask(bitmapWatermark, watermarkPixels);
 
                 Bundle bundle = new Bundle();
                 HashMap<String, PictureRaw> rawMap = new HashMap<>();
-                rawMap.put("image", PictureBase.pictureBase(bitmapImage, imagePixels));
-                rawMap.put("watermark", PictureMask.pictureMask(bitmapWatermark, watermarkPixels));
+                rawMap.put("image", pictureBase);
+                rawMap.put("watermark", pictureMask);
                 bundle.putSerializable("rawMap", rawMap);
                 NavHostFragment.findNavController(FirstFragment.this)
                         .navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
@@ -123,8 +123,4 @@ public class FirstFragment extends Fragment {
                 }
             });
 
-
-//    private int[] encrypt(Bitmap bitmap){
-//
-//    }
 }

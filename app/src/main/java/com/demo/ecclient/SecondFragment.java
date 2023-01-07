@@ -1,5 +1,6 @@
 package com.demo.ecclient;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +17,13 @@ import java.util.HashMap;
 import model.PictureBase;
 import model.PictureMask;
 import model.PictureRaw;
+import utils.BitmapHelper;
+import utils.TypeConverter;
 
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
+    Bitmap bitmap;
 
 
     @Override
@@ -41,10 +45,12 @@ public class SecondFragment extends Fragment {
             PictureMask mask = (PictureMask) hashMap.get("watermark");
 
             if (base != null) {
-                binding.imageTwo.setImageBitmap(base.getBitmap());
+                binding.imageTwo.setImageBitmap(
+                        BitmapHelper.setBitmapPixels(base.getPixels(), base.getWidth(),base.getHeight()));
             }
             if (mask != null) {
-                binding.watermarkTwo.setImageBitmap(mask.getBitmap());
+                binding.watermarkTwo.setImageBitmap(
+                        BitmapHelper.setBitmapPixels(mask.getPixels(), mask.getWidth(),mask.getHeight()));
             }
         }
 
