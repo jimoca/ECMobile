@@ -11,9 +11,16 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.demo.ecclient.databinding.FragmentSecondBinding;
 
+import java.util.HashMap;
+
+import model.PictureBase;
+import model.PictureMask;
+import model.PictureRaw;
+
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
+
 
     @Override
     public View onCreateView(
@@ -28,6 +35,21 @@ public class SecondFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (getArguments() != null) {
+            HashMap<String, PictureRaw> hashMap = (HashMap<String, PictureRaw>) getArguments().getSerializable("rawMap");
+            PictureBase base = (PictureBase) hashMap.get("image");
+            PictureMask mask = (PictureMask) hashMap.get("watermark");
+
+            if (base != null) {
+                binding.imageTwo.setImageBitmap(base.getBitmap());
+            }
+            if (mask != null) {
+                binding.watermarkTwo.setImageBitmap(mask.getBitmap());
+            }
+        }
+
+
+
 
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
             @Override

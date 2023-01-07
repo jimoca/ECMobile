@@ -23,16 +23,27 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.demo.ecclient.databinding.FragmentFirstBinding;
 
 import java.io.IOException;
+import java.util.HashMap;
 
+import model.PictureBase;
+import model.PictureMask;
+import model.PictureRaw;
 import utils.BitmapHelper;
 
 public class FirstFragment extends Fragment {
 
     private FragmentFirstBinding binding;
 
-    private Bitmap bitmap;
-
     private ImageView currentImageView;
+
+    private int[] imagePixels;
+
+    private int[] watermarkPixels;
+
+    private Bitmap bitmapImage;
+
+    private Bitmap bitmapWatermark;
+
 
     @Override
     public View onCreateView(
@@ -51,8 +62,16 @@ public class FirstFragment extends Fragment {
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                imagePixels = encrypt(bitmapImage);
+//                watermarkPixels = encrypt(bitmapWatermark);
+
+                Bundle bundle = new Bundle();
+                HashMap<String, PictureRaw> rawMap = new HashMap<>();
+                rawMap.put("image", PictureBase.pictureBase(bitmapImage, imagePixels));
+                rawMap.put("watermark", PictureMask.pictureMask(bitmapWatermark, watermarkPixels));
+                bundle.putSerializable("rawMap", rawMap);
                 NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                        .navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
             }
         });
 
@@ -85,8 +104,16 @@ public class FirstFragment extends Fragment {
                         if (data != null) {
                             Uri selectedImage = data.getData();
                             try {
-                                bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), selectedImage);
+                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), selectedImage);
                                 currentImageView.setImageBitmap(bitmap);
+                                if (binding.imageOne.equals(currentImageView)) {
+                                    bitmapImage = bitmap;
+                                    imagePixels = BitmapHelper.getBitmapPixels(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight());
+                                } else if (binding.watermark.equals(currentImageView)) {
+                                    bitmapWatermark = bitmap;
+                                    watermarkPixels = BitmapHelper.getBitmapPixels(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight());
+                                }
+
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -95,4 +122,9 @@ public class FirstFragment extends Fragment {
                     }
                 }
             });
+
+
+//    private int[] encrypt(Bitmap bitmap){
+//
+//    }
 }
