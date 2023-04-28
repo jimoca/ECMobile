@@ -1,6 +1,5 @@
 package com.demo.ecclient;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +13,10 @@ import com.demo.ecclient.databinding.FragmentSecondBinding;
 
 import java.util.HashMap;
 
-import model.PictureBase;
-import model.PictureMask;
-import model.PictureRaw;
-import utils.BitmapHelper;
+import com.demo.ecclient.model.PictureBase;
+import com.demo.ecclient.model.PictureMask;
+import com.demo.ecclient.model.PictureRaw;
+import com.demo.ecclient.utils.BitmapHelper;
 
 public class SecondFragment extends Fragment {
 

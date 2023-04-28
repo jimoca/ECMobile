@@ -1,4 +1,4 @@
-package model;
+package com.demo.ecclient.model;
 
 
 import java.math.BigInteger;

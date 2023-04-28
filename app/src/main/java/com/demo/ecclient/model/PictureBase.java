@@ -1,25 +1,27 @@
-package model;
+package com.demo.ecclient.model;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
-public class PictureMask implements PictureRaw {
+public class PictureBase implements PictureRaw, Serializable {
+    private static final long serialVersionUID = -3751255153289772365L;
     private BigInteger[] pixels;
     private int width;
     private int height;
 
-    public PictureMask(BigInteger[] pixels, int width, int height) {
+    public PictureBase(BigInteger[] pixels, int width, int height) {
         this.pixels = pixels;
         this.width = width;
         this.height = height;
     }
 
-    public static PictureMask pictureMask(Bitmap bitmap, int[] pixels) {
+    public static PictureBase pictureBase(Bitmap bitmap, int[] pixels) {
         BigInteger[] bigIntegers = new BigInteger[pixels.length];
-        for (int i = 0; i < pixels.length; i++)
+        for (int i = 0; i < pixels.length ; i++)
             bigIntegers[i] = BigInteger.valueOf(pixels[i]);
-        return new PictureMask(bigIntegers, bitmap.getWidth(), bitmap.getHeight());
+        return new PictureBase(bigIntegers, bitmap.getWidth(), bitmap.getHeight());
     }
 
     public void setPixels(BigInteger[] pixels) {

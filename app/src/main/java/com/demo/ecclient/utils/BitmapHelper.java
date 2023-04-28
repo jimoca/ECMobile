@@ -1,4 +1,4 @@
-package utils;
+package com.demo.ecclient.utils;
 
 
 import android.graphics.Bitmap;

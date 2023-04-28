@@ -1,4 +1,4 @@
-package utils;
+package com.demo.ecclient.utils;
 
 import java.math.BigInteger;
 import java.util.Arrays;
