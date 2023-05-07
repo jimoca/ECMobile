@@ -2,9 +2,11 @@ package com.demo.ecclient.model;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
-public class PictureMask implements PictureRaw {
+public class PictureMask implements PictureRaw, Serializable {
+    private static final long serialVersionUID = -3751255153289772365L;
     private BigInteger[] pixels;
     private int width;
     private int height;

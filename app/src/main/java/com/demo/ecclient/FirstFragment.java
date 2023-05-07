@@ -26,13 +26,12 @@ import androidx.fragment.app.Fragment;
 
 import com.demo.ecclient.databinding.FragmentFirstBinding;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
+import java.io.ObjectOutputStream;
 import java.security.KeyPair;
 import java.security.SecureRandom;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import com.demo.ecclient.model.DelegateModel;
@@ -59,7 +58,6 @@ import com.demo.ecclient.utils.PaillierPixels;
 import com.demo.ecclient.utils.StreamResultTask;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonWriter;
 
 public class FirstFragment extends Fragment implements AsyncResponse {
 
@@ -84,7 +82,6 @@ public class FirstFragment extends Fragment implements AsyncResponse {
     private PaillierPublicKey publicKey;
 
     private PaillierPrivateKey privateKey;
-
 
 
     @Override
@@ -204,12 +201,8 @@ public class FirstFragment extends Fragment implements AsyncResponse {
                 .encryptPixels(pictureMask.getPixels(), publicKey));
         DelegateModel delegateModel = new DelegateModel(pictureBase, pictureMask, publicKey);
 
-        File cacheDir = this.getContext().getCacheDir();
-        File outputFile = new File(cacheDir, "large_data.json");
-        writeLargeObjectListToFile(delegateModel, outputFile);
-        Log.d("fffffff", "finish write: " + this.getContext().getCacheDir());
-        RequestBody requestBody = createFileRequestBody(outputFile);
-        Log.d("aaaaaaaaaaaaa", "asdasdasd: " + delegateModel.getBase().getPixels().length);
+        byte[] serializedData = objectSerialize(delegateModel);
+        RequestBody requestBody = createByteArrToRequestBody(serializedData);
         retrofitAPI
                 .delegate(requestBody)
                 .enqueue(new Callback<>() {
@@ -229,25 +222,24 @@ public class FirstFragment extends Fragment implements AsyncResponse {
                 });
     }
 
-    private void writeLargeObjectListToFile(DelegateModel object, File outputFile) {
-        Gson gson = new Gson();
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
-            JsonWriter jsonWriter = gson.newJsonWriter(outputStreamWriter);
-            gson.toJson(object, DelegateModel.class, jsonWriter);
-            jsonWriter.flush();
-            jsonWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private byte[] objectSerialize(DelegateModel delegateModel) {
+       return Optional.of(delegateModel)
+                .map(it -> {
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    ObjectOutputStream objectOutputStream = null;
+                    try {
+                        objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+                        objectOutputStream.writeObject(delegateModel);
+                        objectOutputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return byteArrayOutputStream.toByteArray();
+                }).orElse(new byte[]{});
     }
 
-
-
-
-    private RequestBody createFileRequestBody(File file) {
-        return RequestBody.create(MediaType.parse("application/json"), file);
+    private RequestBody createByteArrToRequestBody(byte[] serializedData) {
+       return RequestBody.create(MediaType.parse("application/octet-stream"), serializedData);
     }
 
     @Override

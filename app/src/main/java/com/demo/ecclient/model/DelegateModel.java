@@ -1,14 +1,14 @@
 package com.demo.ecclient.model;
 
+import java.io.Serializable;
+
 import security.paillier.PaillierPublicKey;
 
-public class DelegateModel {
+public class DelegateModel implements Serializable {
+    private static final long serialVersionUID = -3751255153289772365L;
     private PictureBase base;
     private PictureMask mask;
     private PaillierPublicKey publicKey;
-
-    public DelegateModel() {
-    }
 
     public DelegateModel(PictureBase base, PictureMask mask, PaillierPublicKey publicKey) {
         this.base = base;
