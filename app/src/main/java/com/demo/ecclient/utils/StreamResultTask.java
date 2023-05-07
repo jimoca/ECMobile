@@ -30,7 +30,7 @@ public class StreamResultTask extends AsyncTask<ResponseBody, Void, PictureBase>
     @Override
     protected PictureBase doInBackground(ResponseBody... responseBodies) {
         PictureBase pictureRes = responseBodyToObj(responseBodies[0]);
-        Log.d(API_TAG, "file download was a success? " + (pictureRes != null));
+        Log.d(API_TAG, "Byte[] receiving was success? " + (pictureRes != null));
         return pictureRes;
     }
 
@@ -44,9 +44,7 @@ public class StreamResultTask extends AsyncTask<ResponseBody, Void, PictureBase>
         try (InputStream inputStream = body.byteStream();
              ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
 
-            PictureBase serializedData = (PictureBase) objectInputStream.readObject();
-            Log.d(API_TAG, "Finish: " + serializedData.getHeight());
-            return serializedData;
+            return (PictureBase) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             return null;
