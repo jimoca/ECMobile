@@ -6,6 +6,17 @@
     app:startDestination="@id/FirstFragment">
 
     <fragment
+        android:id="@+id/DiscoverFragment"
+        android:name="com.demo.ecclient.DiscoverFragment"
+        android:label="@string/discover_label"
+        tools:layout="@layout/fragment_discover">
+
+        <action
+            android:id="@+id/action_DiscoverFragment_toFirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/FirstFragment"
         android:name="com.demo.ecclient.FirstFragment"
         android:label="@string/first_fragment_label"
@@ -22,7 +33,7 @@
         tools:layout="@layout/fragment_second">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_SecondFragment_to_DiscoverFragment"
+            app:destination="@id/DiscoverFragment" />
     </fragment>
 </navigation>
