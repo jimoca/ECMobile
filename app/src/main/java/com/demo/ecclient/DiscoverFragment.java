@@ -1,19 +1,35 @@
 package com.demo.ecclient;
 
+import static com.demo.ecclient.utils.Constants.CENTER_API_URL;
+
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DiscoverFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.demo.ecclient.databinding.FragmentDiscoverBinding;
+import com.demo.ecclient.model.EdgeInfo;
+import com.demo.ecclient.model.RetrofitAPI;
+import com.demo.ecclient.placeholder.PlaceholderContent;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class DiscoverFragment extends Fragment {
+
+    private FragmentDiscoverBinding binding;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +40,11 @@ public class DiscoverFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private ProgressBar progressBar;
+
+
     public DiscoverFragment() {
+
         // Required empty public constructor
     }
 
@@ -58,7 +78,47 @@ public class DiscoverFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_discover, container, false);
+        binding = FragmentDiscoverBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        binding.buttonDiscover.setOnClickListener(v -> discover());
+
+        progressBar = binding.loadingProgressBar;
+    }
+
+    private void discover() {
+        progressBar.setVisibility(View.VISIBLE);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(CENTER_API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        RetrofitAPI service = retrofit.create(RetrofitAPI.class);
+        Call<List<EdgeInfo>> call = service.discover();
+        System.out.println("asdasdasd");
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(Call<List<EdgeInfo>> call, Response<List<EdgeInfo>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    PlaceholderContent.updateItem(response.body());
+                    NavHostFragment.findNavController(DiscoverFragment.this)
+                            .navigate(R.id.action_DiscoverFragment_to_EdgeInfoFragment);
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<EdgeInfo>> call, Throwable t) {
+                // Handle error
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
+
 }

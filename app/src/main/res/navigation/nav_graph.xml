@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/DiscoverFragment">
+
+
+
 
     <fragment
         android:id="@+id/DiscoverFragment"
@@ -12,7 +15,18 @@
         tools:layout="@layout/fragment_discover">
 
         <action
-            android:id="@+id/action_DiscoverFragment_toFirstFragment"
+            android:id="@+id/action_DiscoverFragment_to_EdgeInfoFragment"
+            app:destination="@id/EdgeInfoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/EdgeInfoFragment"
+        android:name="com.demo.ecclient.EdgeInfoFragment"
+        android:label="@string/edges_label"
+        tools:layout="@layout/fragment_edge_list">
+
+        <action
+            android:id="@+id/action_EdgeInfoFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
 

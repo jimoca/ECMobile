@@ -2,7 +2,7 @@ package com.demo.ecclient;
 
 
 import static com.demo.ecclient.utils.Constants.API_TAG;
-import static com.demo.ecclient.utils.Constants.API_URL;
+import static com.demo.ecclient.utils.Constants.EDGE_API_URL;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -105,7 +105,7 @@ public class FirstFragment extends Fragment implements AsyncResponse {
                 .connectTimeout(100, TimeUnit.SECONDS)
                 .build();
         retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
+                .baseUrl(EDGE_API_URL)
 //                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 //                .addConverterFactory(StreamingGsonConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
