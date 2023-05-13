@@ -30,8 +30,10 @@ public class EdgeInfoRecyclerViewAdapter extends RecyclerView.Adapter<EdgeInfoRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getEdgeId().toString());
-        holder.mContentView.setText(mValues.get(position).getIpAddress());
+//        holder.mIdView.setText(mValues.get(position).getEdgeId().toString());
+        holder.mIpView.setText(mValues.get(position).getIpAddress());
+        holder.mLocationView.setText(mValues.get(position).getLocation());
+        holder.mDelayView.setText(mValues.get(position).getDelay().toString()+"ms");
     }
 
     @Override
@@ -40,19 +42,20 @@ public class EdgeInfoRecyclerViewAdapter extends RecyclerView.Adapter<EdgeInfoRe
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mIdView;
-        public final TextView mContentView;
+//        public final TextView mIdView;
+        public final TextView mIpView;
+        public final TextView mLocationView;
+        public final TextView mDelayView;
         public EdgeInfo mItem;
 
         public ViewHolder(FragmentEdgeBinding binding) {
             super(binding.getRoot());
-            mIdView = binding.itemNumber;
-            mContentView = binding.content;
+//            mIdView = binding.edgeId;
+            mIpView = binding.ip;
+            mLocationView = binding.location;
+            mDelayView = binding.delay;
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
-        }
+
     }
 }

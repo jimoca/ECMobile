@@ -12,11 +12,14 @@ public class EdgeInfo {
 
     private BigDecimal charge;
 
-    public EdgeInfo(Long edgeId, String location, String ipAddress, BigDecimal charge) {
+    private Long delay;
+
+    public EdgeInfo(Long edgeId, String location, String ipAddress, BigDecimal charge, Long delay) {
         this.edgeId = edgeId;
         this.location = location;
         this.ipAddress = ipAddress;
         this.charge = charge;
+        this.delay = delay;
     }
 
     public Long getEdgeId() {
@@ -49,5 +52,14 @@ public class EdgeInfo {
 
     public void setCharge(BigDecimal charge) {
         this.charge = charge;
+    }
+
+
+    public Long getDelay() {
+        return delay;
+    }
+
+    public void setDelay(Long delay) {
+        this.delay = delay;
     }
 }
