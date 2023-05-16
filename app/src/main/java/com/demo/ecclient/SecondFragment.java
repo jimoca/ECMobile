@@ -17,10 +17,17 @@ import com.demo.ecclient.model.PictureBase;
 import com.demo.ecclient.model.PictureMask;
 import com.demo.ecclient.model.PictureRaw;
 import com.demo.ecclient.utils.BitmapHelper;
+import com.demo.ecclient.utils.PaillierPixels;
+
+import security.paillier.PaillierPrivateKey;
 
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
+
+    private PictureBase result;
+
+    private PaillierPrivateKey privateKey;
 
 
     @Override
@@ -37,30 +44,18 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
-            HashMap<String, PictureRaw> hashMap = (HashMap<String, PictureRaw>) getArguments().getSerializable("rawMap");
-            PictureBase base = (PictureBase) hashMap.get("image");
-            PictureMask mask = (PictureMask) hashMap.get("watermark");
-
-            if (base != null) {
-                binding.imageTwo.setImageBitmap(
-                        BitmapHelper.setBitmapPixels(base.getPixels(), base.getWidth(),base.getHeight()));
-            }
-            if (mask != null) {
-                binding.watermarkTwo.setImageBitmap(
-                        BitmapHelper.setBitmapPixels(mask.getPixels(), mask.getWidth(),mask.getHeight()));
+            result = (PictureBase) getArguments().getSerializable("result");
+            privateKey = (PaillierPrivateKey) getArguments().getSerializable("sk");
+            if (result != null) {
+                binding.imageRes.setImageBitmap(
+                        BitmapHelper.setBitmapPixels(result.getPixels(), result.getWidth(), result.getHeight()));
             }
         }
 
 
-
-
-        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_DiscoverFragment);
-            }
-        });
+        binding.buttonDecrypt.setOnClickListener(view1 -> binding.imageRes.setImageBitmap(
+                BitmapHelper.setBitmapPixels(
+                        PaillierPixels.decryptPixels(result.getPixels(), privateKey), result.getWidth(), result.getHeight())));
     }
 
     @Override

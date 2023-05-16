@@ -23,6 +23,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.demo.ecclient.databinding.FragmentFirstBinding;
 
@@ -31,12 +32,14 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.security.KeyPair;
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import com.demo.ecclient.model.DelegateModel;
 import com.demo.ecclient.model.PictureBase;
 import com.demo.ecclient.model.PictureMask;
+import com.demo.ecclient.model.PictureRaw;
 import com.demo.ecclient.model.RetrofitAPI;
 
 import okhttp3.MediaType;
@@ -116,17 +119,7 @@ public class FirstFragment extends Fragment implements AsyncResponse {
         binding.buttonDelegate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 delegate();
-//
-//                Bundle bundle = new Bundle();
-//                HashMap<String, PictureRaw> rawMap = new HashMap<>();
-//                rawMap.put("image", pictureBase);
-//                rawMap.put("watermark", pictureMask);
-//                bundle.putSerializable("rawMap", rawMap);
-//                NavHostFragment.findNavController(FirstFragment.this)
-//                        .navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
             }
         });
 
@@ -223,7 +216,7 @@ public class FirstFragment extends Fragment implements AsyncResponse {
     }
 
     private byte[] objectSerialize(DelegateModel delegateModel) {
-       return Optional.of(delegateModel)
+        return Optional.of(delegateModel)
                 .map(it -> {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     ObjectOutputStream objectOutputStream = null;
@@ -239,7 +232,7 @@ public class FirstFragment extends Fragment implements AsyncResponse {
     }
 
     private RequestBody createByteArrToRequestBody(byte[] serializedData) {
-       return RequestBody.create(MediaType.parse("application/octet-stream"), serializedData);
+        return RequestBody.create(MediaType.parse("application/octet-stream"), serializedData);
     }
 
     @Override
@@ -249,12 +242,12 @@ public class FirstFragment extends Fragment implements AsyncResponse {
 
     @Override
     public void processFinish(PictureBase output) {
-        binding.imageRes.setImageBitmap(BitmapHelper.setBitmapPixels(output.getPixels(), output.getWidth(), output.getHeight()));
-        binding.buttonDecrypt.setOnClickListener(view3 -> {
-            binding.imageRes.setImageBitmap(
-                    BitmapHelper.setBitmapPixels(
-                            PaillierPixels.decryptPixels(output.getPixels(), privateKey), output.getWidth(), output.getHeight()));
-        });
         progressBar.setVisibility(View.GONE);
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("result", output);
+        bundle.putSerializable("sk", privateKey);
+        NavHostFragment.findNavController(FirstFragment.this)
+                .navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
     }
 }

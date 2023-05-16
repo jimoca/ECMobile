@@ -16,13 +16,14 @@ public class EdgeInfoRecyclerViewAdapter extends RecyclerView.Adapter<EdgeInfoRe
 
     private final List<EdgeInfo> mValues;
 
+    private OnItemClickListener listener;
+
     public EdgeInfoRecyclerViewAdapter(List<EdgeInfo> items) {
         mValues = items;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         return new ViewHolder(FragmentEdgeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
 
     }
@@ -34,12 +35,25 @@ public class EdgeInfoRecyclerViewAdapter extends RecyclerView.Adapter<EdgeInfoRe
         holder.mIpView.setText(mValues.get(position).getIpAddress());
         holder.mLocationView.setText(mValues.get(position).getLocation());
         holder.mDelayView.setText(mValues.get(position).getDelay().toString()+"ms");
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(mValues.get(position));
+            }
+        });
     }
+
+
 
     @Override
     public int getItemCount() {
         return mValues.size();
     }
+
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 //        public final TextView mIdView;
@@ -57,5 +71,9 @@ public class EdgeInfoRecyclerViewAdapter extends RecyclerView.Adapter<EdgeInfoRe
         }
 
 
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(EdgeInfo item);
     }
 }

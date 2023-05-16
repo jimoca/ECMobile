@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,7 +67,13 @@ public class EdgeInfoFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new EdgeInfoRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            EdgeInfoRecyclerViewAdapter adapter = new EdgeInfoRecyclerViewAdapter(PlaceholderContent.ITEMS);
+            recyclerView.setAdapter(adapter);
+
+            adapter.setOnItemClickListener(item -> {
+                NavHostFragment.findNavController(EdgeInfoFragment.this)
+                        .navigate(R.id.action_EdgeInfoFragment_to_FirstFragment);
+            });
         }
         return view;
     }
