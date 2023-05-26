@@ -30,6 +30,7 @@ import com.demo.ecclient.databinding.FragmentFirstBinding;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.SecureRandom;
 import java.util.HashMap;
@@ -55,9 +56,13 @@ import security.paillier.PaillierKeyPairGenerator;
 import security.paillier.PaillierPrivateKey;
 import security.paillier.PaillierPublicKey;
 
+import com.demo.ecclient.model.TaskModel;
 import com.demo.ecclient.utils.AsyncResponse;
 import com.demo.ecclient.utils.BitmapHelper;
 import com.demo.ecclient.utils.PaillierPixels;
+import com.demo.ecclient.utils.QuorumConnection;
+import com.demo.ecclient.utils.QuorumConnectionAsyncTask;
+import com.demo.ecclient.utils.QuorumConnectionRes;
 import com.demo.ecclient.utils.StreamResultTask;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -85,6 +90,7 @@ public class FirstFragment extends Fragment implements AsyncResponse {
     private PaillierPublicKey publicKey;
 
     private PaillierPrivateKey privateKey;
+
 
 
     @Override
@@ -136,6 +142,8 @@ public class FirstFragment extends Fragment implements AsyncResponse {
         });
 
         progressBar = binding.loadingProgressBar;
+
+
     }
 
     @Override
@@ -182,6 +190,8 @@ public class FirstFragment extends Fragment implements AsyncResponse {
         publicKey = (PaillierPublicKey) pe.getPublic();
         privateKey = (PaillierPrivateKey) pe.getPrivate();
     }
+
+
 
 
     private void delegate() {
@@ -250,4 +260,6 @@ public class FirstFragment extends Fragment implements AsyncResponse {
         NavHostFragment.findNavController(FirstFragment.this)
                 .navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
     }
+
+
 }

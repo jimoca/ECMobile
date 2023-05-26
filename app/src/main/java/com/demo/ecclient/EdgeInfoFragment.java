@@ -72,7 +72,7 @@ public class EdgeInfoFragment extends Fragment {
 
             adapter.setOnItemClickListener(item -> {
                 NavHostFragment.findNavController(EdgeInfoFragment.this)
-                        .navigate(R.id.action_EdgeInfoFragment_to_FirstFragment);
+                        .navigate(R.id.action_EdgeInfoFragment_to_EdgeDetailFragment);
             });
         }
         return view;

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -11,17 +12,21 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.demo.ecclient.databinding.FragmentSecondBinding;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 
+import com.demo.ecclient.model.DecryptModel;
 import com.demo.ecclient.model.PictureBase;
 import com.demo.ecclient.model.PictureMask;
 import com.demo.ecclient.model.PictureRaw;
 import com.demo.ecclient.utils.BitmapHelper;
+import com.demo.ecclient.utils.DecryptAsync;
+import com.demo.ecclient.utils.DecryptAsyncTask;
 import com.demo.ecclient.utils.PaillierPixels;
 
 import security.paillier.PaillierPrivateKey;
 
-public class SecondFragment extends Fragment {
+public class SecondFragment extends Fragment implements DecryptAsync {
 
     private FragmentSecondBinding binding;
 
@@ -29,6 +34,7 @@ public class SecondFragment extends Fragment {
 
     private PaillierPrivateKey privateKey;
 
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(
@@ -52,10 +58,12 @@ public class SecondFragment extends Fragment {
             }
         }
 
+        progressBar = binding.loadingProgressBar;
+        binding.buttonDecrypt.setOnClickListener(view1 -> decryptImage());
+    }
 
-        binding.buttonDecrypt.setOnClickListener(view1 -> binding.imageRes.setImageBitmap(
-                BitmapHelper.setBitmapPixels(
-                        PaillierPixels.decryptPixels(result.getPixels(), privateKey), result.getWidth(), result.getHeight())));
+    private void decryptImage() {
+        new DecryptAsyncTask(SecondFragment.this).execute(new DecryptModel(result, privateKey));
     }
 
     @Override
@@ -64,4 +72,16 @@ public class SecondFragment extends Fragment {
         binding = null;
     }
 
+    @Override
+    public void processStart() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void processFinish(BigInteger[] output) {
+        binding.imageRes.setImageBitmap(
+                BitmapHelper.setBitmapPixels(output, result.getWidth(), result.getHeight()));
+
+        progressBar.setVisibility(View.GONE);
+    }
 }

@@ -8,9 +8,12 @@ import android.util.Log;
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import security.misc.HomomorphicException;
 import security.paillier.PaillierCipher;
@@ -53,9 +56,10 @@ public class PaillierPixels {
     public static BigInteger[] decryptPixels(BigInteger[] pixels, PaillierPrivateKey privateKey) {
         Instant start = Instant.now();
         Log.d(DECRYPT, "Start...");
-        Map<BigInteger, BigInteger> repeatPixel = new HashMap<>();
+        Map<BigInteger, BigInteger> repeatPixel = new ConcurrentHashMap<>();
 
-        pixels = Arrays.stream(pixels).map(pixel -> {
+        List<BigInteger> newPixels = new ArrayList<>();
+        Arrays.stream(pixels).map(pixel -> {
             BigInteger plainPixel = null;
             try {
                 plainPixel = repeatPixel.containsKey(pixel) ? repeatPixel.get(pixel) : PaillierCipher.decrypt(pixel, privateKey);
@@ -67,13 +71,13 @@ public class PaillierPixels {
                 e.printStackTrace();
             }
             return plainPixel;
-        }).toArray(BigInteger[]::new);
+        }).forEachOrdered(newPixels::add);
 
         Instant finish = Instant.now();
         long time = Duration.between(start, finish).toMillis();
         Log.d(DECRYPT, "Finished: " + time + "ms");
 
-        return pixels;
+        return newPixels.toArray(BigInteger[]::new);
     }
 
 }

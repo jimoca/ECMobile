@@ -26,7 +26,18 @@
         tools:layout="@layout/fragment_edge_list">
 
         <action
-            android:id="@+id/action_EdgeInfoFragment_to_FirstFragment"
+            android:id="@+id/action_EdgeInfoFragment_to_EdgeDetailFragment"
+            app:destination="@id/EdgeDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/EdgeDetailFragment"
+        android:name="com.demo.ecclient.EdgeDetailFragment"
+        android:label="@string/edge_detail"
+        tools:layout="@layout/fragment_edge_detail">
+
+        <action
+            android:id="@+id/action_EdgeDetailFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
 
