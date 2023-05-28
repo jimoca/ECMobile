@@ -184,7 +184,9 @@ public class EdgeDetailFragment extends Fragment implements QuorumConnectionRes,
     @Override
     public void payFinished() {
         progressBar.setVisibility(View.GONE);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("taskId", task.getTaskId());
         NavHostFragment.findNavController(EdgeDetailFragment.this)
-                .navigate(R.id.action_EdgeDetailFragment_to_FirstFragment);
+                .navigate(R.id.action_EdgeDetailFragment_to_FirstFragment, bundle);
     }
 }

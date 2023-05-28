@@ -3,12 +3,6 @@ package com.demo.ecclient.utils;
 import android.os.AsyncTask;
 
 import com.demo.ecclient.model.DecryptModel;
-import com.demo.ecclient.model.PayModel;
-
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.tx.gas.DefaultGasProvider;
-import org.web3j.tx.gas.StaticGasProvider;
-import org.web3j.utils.Convert;
 
 import java.math.BigInteger;
 

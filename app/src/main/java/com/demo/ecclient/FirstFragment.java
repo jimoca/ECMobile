@@ -33,14 +33,12 @@ import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.SecureRandom;
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import com.demo.ecclient.model.DelegateModel;
 import com.demo.ecclient.model.PictureBase;
 import com.demo.ecclient.model.PictureMask;
-import com.demo.ecclient.model.PictureRaw;
 import com.demo.ecclient.model.RetrofitAPI;
 
 import okhttp3.MediaType;
@@ -56,13 +54,9 @@ import security.paillier.PaillierKeyPairGenerator;
 import security.paillier.PaillierPrivateKey;
 import security.paillier.PaillierPublicKey;
 
-import com.demo.ecclient.model.TaskModel;
 import com.demo.ecclient.utils.AsyncResponse;
 import com.demo.ecclient.utils.BitmapHelper;
 import com.demo.ecclient.utils.PaillierPixels;
-import com.demo.ecclient.utils.QuorumConnection;
-import com.demo.ecclient.utils.QuorumConnectionAsyncTask;
-import com.demo.ecclient.utils.QuorumConnectionRes;
 import com.demo.ecclient.utils.StreamResultTask;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -91,7 +85,7 @@ public class FirstFragment extends Fragment implements AsyncResponse {
 
     private PaillierPrivateKey privateKey;
 
-
+    private BigInteger taskId;
 
     @Override
     public View onCreateView(
@@ -106,6 +100,11 @@ public class FirstFragment extends Fragment implements AsyncResponse {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (getArguments() != null) {
+            taskId = (BigInteger) getArguments().getSerializable("taskId");
+        }
+
+
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
@@ -142,6 +141,7 @@ public class FirstFragment extends Fragment implements AsyncResponse {
         });
 
         progressBar = binding.loadingProgressBar;
+
 
 
     }
@@ -196,6 +196,7 @@ public class FirstFragment extends Fragment implements AsyncResponse {
 
     private void delegate() {
         progressBar.setVisibility(View.VISIBLE);
+
         PictureBase pictureBase = PictureBase.pictureBase(bitmapImage, imagePixels);
         PictureMask pictureMask = PictureMask.pictureMask(bitmapWatermark, watermarkPixels);
         pictureBase.setPixels(PaillierPixels
@@ -207,7 +208,7 @@ public class FirstFragment extends Fragment implements AsyncResponse {
         byte[] serializedData = objectSerialize(delegateModel);
         RequestBody requestBody = createByteArrToRequestBody(serializedData);
         retrofitAPI
-                .delegate(requestBody)
+                .delegate(requestBody, taskId)
                 .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {

@@ -7,5 +7,6 @@ public class Constants {
     public static final String API_TAG = "[API]";
     public static final String ENCRYPT = "[Encrypt]";
     public static final String DECRYPT = "[Decrypt]";
+    public static final String PAY = "[Pay]";
     public static final long CHAIN_ID = 10;
 }
