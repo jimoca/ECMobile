@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/price_text"
         android:scaleType="centerInside"
-        android:text="IP address: 192.168.2.3" />
+        android:text="IP address: 192.168.0.249:8080" />
 
     <TextView
         android:id="@+id/price_text"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@id/ip_text"
         app:layout_constraintBottom_toTopOf="@id/button_start"
         android:scaleType="centerInside"
-        android:text="Price: 3" />
+        android:text="Price: 3.0" />
 
     <Button
         android:id="@+id/button_start"

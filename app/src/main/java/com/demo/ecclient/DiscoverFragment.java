@@ -129,10 +129,10 @@ public class DiscoverFragment extends Fragment {
 
     private List<EdgeInfo> edges() {
         return List.of(
-                new EdgeInfo(2L, "TW", "192.168.2.3", new BigDecimal("2.0"), 6L),
-                new EdgeInfo(5L, "JP", "192.168.2.5", new BigDecimal("2.0"), 36L),
-                new EdgeInfo(6L, "US", "192.168.2.6", new BigDecimal("2.0"), 82L),
-                new EdgeInfo(8L, "AU", "192.168.2.8", new BigDecimal("2.0"), 73L)
+                new EdgeInfo(2L, "TW", "192.168.0.249:8080", new BigDecimal("3.0"), 2L),
+                new EdgeInfo(5L, "JP", "192.168.0.249:8081", new BigDecimal("3.0"), 20L),
+                new EdgeInfo(6L, "US", "192.168.0.249:8082", new BigDecimal("3.0"), 82L),
+                new EdgeInfo(8L, "AU", "192.168.0.249:8083", new BigDecimal("3.0"), 73L)
         );
     }
 
